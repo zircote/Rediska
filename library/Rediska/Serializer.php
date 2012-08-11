@@ -19,6 +19,8 @@ class Rediska_Serializer
      */
     protected $_adapter;
 
+    protected $_serializationEnabled = true;
+
     /**
      * Constuctor
      * 
@@ -75,13 +77,23 @@ class Rediska_Serializer
      */
     public function serialize($value)
     {
-        if (is_numeric($value) || is_string($value)) {
+        if (is_numeric($value) || is_string($value) || !$this->_serializationEnabled) {
             return (string)$value;
         } else {
             return $this->_adapter->serialize($value);
         }
     }
 
+    /**
+     * @param bool $serialize
+     *
+     * @return Rediska_Serializer
+     */
+    public function toggleSerialization($serialize = true)
+    {
+        $this->_serializationEnabled = $serialize;
+        return $this;
+    }
     /**
      * Unserailize value
      * 
@@ -90,6 +102,9 @@ class Rediska_Serializer
      */
     public function unserialize($value)
     {
+        if(!$this->_serializationEnabled){
+            return $value;
+        }
         if (is_null($value)) {
             return null;
         } else if (is_numeric($value)) {
