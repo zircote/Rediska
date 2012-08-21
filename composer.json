@@ -36,7 +36,9 @@
     "require-dev": {
         "zendframework/zendframework": "1.11.*"
     },
-    "autoload": {
-        "classmap": ["library"]
+    "autoload":{
+        "psr-0":{
+            "Rediska":"library"
+        }
     }
 }

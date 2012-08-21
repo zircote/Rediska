@@ -186,9 +186,10 @@ class Rediska_Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zen
                 self::FIELD_DATA
             );
         }
-        $this->getRediska()->getSerializer()->toggleSerialization(false);
+        $oldSerializaerAdapter = $this->getRediska()->getSerializer()->getAdapter();
+        $this->getRediska()->setSerializerAdapter('toString');
         $result = $transaction->execute();
-        $this->getRediska()->getSerializer()->toggleSerialization(true);
+        $this->getRediska()->getSerializer()->setAdapter($oldSerializaerAdapter);
         if(count($result) == 1){
             if(null === ($result = array_shift($result))){
                 return false;
